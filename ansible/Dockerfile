@@ -1,9 +1,8 @@
 # pull base image
 FROM alpine:3.6
 
-MAINTAINER joaqui jachura jjachurachavez@gmail.com
-
-
+MAINTAINER joaquin jachura jjachurachavez@gmail.coM
+COPY ./entrypoint.sh /opt/entrypoint.sh
 RUN echo "===> Installing sudo to emulate normal OS behavior..."  && \
     apk --update add sudo                                         && \
     \
@@ -27,12 +26,8 @@ RUN echo "===> Installing sudo to emulate normal OS behavior..."  && \
     echo "===> Removing package list..."  && \
     apk del build-dependencies            && \
     rm -rf /var/cache/apk/*               && \
-    \
-    \
-    echo "===> Adding hosts for convenience..."  && \
-    mkdir -p /etc/ansible                        && \
-    echo 'localhost' > /etc/ansible/hosts
+    && cd /opt && unzip *.zip && rm *.zip && mv terraform /bin \
+    && chmod +x entrypoint.sh
 
-
-# default command: display Ansible version
-CMD [ "ansible-playbook", "--version" ]
+## ADDING ENTRYPOINT 
+ENTRYPOINT ["/opt/entrypoint.sh"]
